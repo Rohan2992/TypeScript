@@ -12,3 +12,19 @@ function calculate(a: number, b: number, type: number): number {
 
 const ans = calculate(10, 50, Arithmetic1.add);
 console.log(ans);
+
+type Arithmetic2 = {
+  value: string;
+  operator: string;
+};
+
+interface A2 extends Arithmetic2 {
+  vs: string
+}
+
+
+function greet(value: A2) {
+  return value
+}
+
+console.log(greet({ value: 'hello', operator: "+", vs: "code" }));
