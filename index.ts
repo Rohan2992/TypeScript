@@ -1,35 +1,14 @@
-interface Person {
-  name: string;
-  gender: string;
-  age: number;
-  features: characteristics
+type Arithmetic = "add" | "sub" | "mul" | "div";
+enum Arithmetic1 { add = 1, sub, mul, div }
+
+function calculate(a: number, b: number, type: number): number {
+  if (type === 1) return a + b;
+  else if (type === 2) return a - b;
+  else if (type === 3) return a * b;
+  else if (type === 4) return a / b;
+
+  return -1;
 }
 
-interface characteristics {
-  hairColor: string;
-  color: string;
-  nationality: string;
-}
-
-class livingBeings implements Person {
-  name: string;
-  gender: string;
-  age: number;
-  features: characteristics;
-
-  constructor(name: string, gender: string, age: number, hairColor: string, color: string, nationality: string) {
-    this.name = name;
-    this.gender = gender;
-    this.age = age;
-    this.features = { hairColor: hairColor, color: color, nationality: nationality };
-  }
-  greet(): string {
-    console.log(this.features);
-    return ("Hello, " + this.name + " glad to hear you r " + this.age + " years old.");
-    // return { name: "Rohan", gender: "male", age: 21, features: { hairColor: "black", nationality: "Indian", color: "brown" } };
-  }
-}
-
-const personObject = new livingBeings("Rohan", "male", 21, "black", "Indian", "brown");
-const op = personObject.greet();
-console.log(op);
+const ans = calculate(10, 50, Arithmetic1.add);
+console.log(ans);
