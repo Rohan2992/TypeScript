@@ -1,12 +1,13 @@
-const express = require("express");
-const { authenticateJwt } = require("../middleware/index");
-const { Todo } = require("../db");
+import express, { Request, Response } from "express";
+import { authenticateJwt } from "../middleware";
+import { Todo } from "../db";
 const router = express.Router();
 
-router.post("/todos", authenticateJwt, (req, res) => {
+
+router.post("/todos", authenticateJwt, (req: Request, res: Response) => {
   const { title, description } = req.body;
   const done = false;
-  const userId = req.userId;
+  const userId = req.headers["userId"];
 
   const newTodo = new Todo({ title, description, done, userId });
 
@@ -21,7 +22,7 @@ router.post("/todos", authenticateJwt, (req, res) => {
 });
 
 router.get("/todos", authenticateJwt, (req, res) => {
-  const userId = req.userId;
+  const userId = req.headers["userId"];
 
   Todo.find({ userId })
     .then(todos => {
@@ -32,10 +33,9 @@ router.get("/todos", authenticateJwt, (req, res) => {
     });
 });
 
-router.patch("/todos/:todoId/done", authenticateJwt, (req, res) => {
+router.put("/todos/:todoId/done", authenticateJwt, (req, res) => {
   const { todoId } = req.params;
-  const userId = req.userId;
-
+  const userId = req.headers["userId"];
   Todo.findOneAndUpdate({ _id: todoId, userId }, { done: true }, { new: true })
     .then(updatedTodo => {
       if (!updatedTodo) {
@@ -48,5 +48,4 @@ router.patch("/todos/:todoId/done", authenticateJwt, (req, res) => {
     });
 });
 
-module.exports = router;
-
+export default router;

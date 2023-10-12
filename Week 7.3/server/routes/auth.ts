@@ -1,12 +1,12 @@
-const jwt = require("jsonwebtoken");
-const express = require("express");
-const { authenticateJwt, SECRET } = require("../middleware/");
-const { User } = require("../db");
+import jwt from "jsonwebtoken";
+import express from "express";
+import { authenticateJwt, SECRET } from "../middleware/"
+import { User } from "../db";
 const router = express.Router();
 
 router.get("/me", authenticateJwt, async (req, res) => {
-  const user = await User.findOne({ _id: req.userId });
-  if (user) { 
+  const user = await User.findOne({ _id: req.headers["userId"] });
+  if (user) {
     res.json({ username: user.username });
   } else {
     res.status(403).json({ message: "User not logged in" });
@@ -37,4 +37,4 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

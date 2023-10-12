@@ -40,7 +40,7 @@ const TodoList = () => {
     const response = await fetch(
       `http://localhost:3000/todo/todos/${id}/done`,
       {
-        method: "PATCH",
+        method: "put",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       }
     );
