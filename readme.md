@@ -44,3 +44,29 @@ TRPC - used to add backend validations and send them to frontend
 - pm2 start file_name // pm2 logs // pm2 list // pm2 kill
 
 # using the zod library
+
+
+# Backend validation
+
+- can be done sending the wrong inputs or exposing the folders to the end-user
+
+  - system("ls") - c++ code #include<cstdlib> - to import system library
+
+- frontend - npm run , node dis , npm run start
+- backend - tsc node dist/index.js
+
+- Input Validation
+
+- By adding some conditions manually in the starting of the routes
+
+TRPC - used to add backend validations and send them to frontend - allows to write types in backend and send them to frontend
+
+# Process Managers
+
+- these runs the backend automatically when it goes down
+- modules - forever & pm2
+- pm2 start file_name // pm2 logs // pm2 list // pm2 kill
+
+# using the zod library
+
+-
