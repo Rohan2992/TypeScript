@@ -1,8 +1,14 @@
 import jwt from "jsonwebtoken";
 import express from "express";
-import { authenticateJwt, SECRET } from "../middleware/"
+import { authenticateJwt, SECRET } from "../middleware/";
 import { User } from "../db";
+import { z } from "zod";
 const router = express.Router();
+
+const inputValidation = z.object({
+  username: z.string().min(1).max(30).email(),
+  password: z.union([z.number().min(1).max(9999999999), z.string().min(1).max(20)])
+});
 
 router.get("/me", authenticateJwt, async (req, res) => {
   const user = await User.findOne({ _id: req.headers["userId"] });
@@ -14,7 +20,13 @@ router.get("/me", authenticateJwt, async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const input = inputValidation.safeParse(req.body);
+
+  if (!input.success) {
+    res.status(411).json({ message: input.error });
+    return;
+  }
+  const { username, password } = input.data;
   const user = await User.findOne({ username, password });
   if (user) {
     const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: "1h" });
@@ -25,7 +37,14 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
-  const { username, password } = req.body;
+  const input = inputValidation.safeParse(req.body);
+
+  if (!input.success) {
+    res.status(411).json({ message: input.error });
+    return;
+  }
+  const { username, password } = input.data;
+
   const user = await User.findOne({ username });
   if (user) {
     res.status(403).json({ message: "User already exists" });
