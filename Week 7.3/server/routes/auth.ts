@@ -14,6 +14,15 @@ router.get("/me", authenticateJwt, async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  if (typeof req.body.username !== "string") {
+    res.status(403).send({ message: "Username should be a string" })
+    return;
+  }
+  if (typeof req.body.password !== "string") {
+    res.status(403).send({ message: "password should be a string" })
+    return;
+  }
+
   const { username, password } = req.body;
   const user = await User.findOne({ username, password });
   if (user) {
@@ -25,6 +34,16 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/signup", async (req, res) => {
+
+  if (typeof req.body.username !== "string") {
+    res.status(403).send({ message: "Username should be a string" })
+    return;
+  }
+  if (typeof req.body.password !== "string") {
+    res.status(403).send({ message: "password should be a string" })
+    return;
+  }
+
   const { username, password } = req.body;
   const user = await User.findOne({ username });
   if (user) {

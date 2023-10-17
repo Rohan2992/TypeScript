@@ -8,13 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const jwt = require("jsonwebtoken");
-const express = require("express");
-const { authenticateJwt, SECRET } = require("../middleware/");
-const { User } = require("../db");
-const router = express.Router();
-router.get("/me", authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield User.findOne({ _id: req.userId });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const express_1 = __importDefault(require("express"));
+const middleware_1 = require("../middleware/");
+const db_1 = require("../db");
+const router = express_1.default.Router();
+router.get("/me", middleware_1.authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield db_1.User.findOne({ _id: req.headers["userId"] });
     if (user) {
         res.json({ username: user.username });
     }
@@ -24,9 +28,9 @@ router.get("/me", authenticateJwt, (req, res) => __awaiter(void 0, void 0, void 
 }));
 router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
-    const user = yield User.findOne({ username, password });
+    const user = yield db_1.User.findOne({ username, password });
     if (user) {
-        const token = jwt.sign({ id: user._id }, SECRET, { expiresIn: "1h" });
+        const token = jsonwebtoken_1.default.sign({ id: user._id }, middleware_1.SECRET, { expiresIn: "1h" });
         res.json({ message: "Logged in successfully", token });
     }
     else {
@@ -34,16 +38,24 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (typeof req.body.username !== "string") {
+        res.status(403).send({ message: "Username should be a string" });
+        return;
+    }
+    if (typeof req.body.password !== "string") {
+        res.status(403).send({ message: "password should be a string" });
+        return;
+    }
     const { username, password } = req.body;
-    const user = yield User.findOne({ username });
+    const user = yield db_1.User.findOne({ username });
     if (user) {
         res.status(403).json({ message: "User already exists" });
     }
     else {
-        const newUser = new User({ username, password });
+        const newUser = new db_1.User({ username, password });
         yield newUser.save();
-        const token = jwt.sign({ id: newUser._id }, SECRET, { expiresIn: "1h" });
+        const token = jsonwebtoken_1.default.sign({ id: newUser._id }, middleware_1.SECRET, { expiresIn: "1h" });
         res.json({ message: "User created successfully", token });
     }
 }));
-module.exports = router;
+exports.default = router;
