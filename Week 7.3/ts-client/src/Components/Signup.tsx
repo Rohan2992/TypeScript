@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { inputParams } from "@rohan2992/common";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const input: inputParams = { username, password };
 
   const handleSignup = async () => {
     const response = await fetch("http://localhost:3000/auth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify(input)
     });
     // Todo: Create a type for the response that you get back from the server
     const data = await response.json();
@@ -28,13 +30,13 @@ const Signup = () => {
         <input
           type="text"
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
         />
         <input
           type="password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
         Already signed up? <Link to="/login">Login</Link>

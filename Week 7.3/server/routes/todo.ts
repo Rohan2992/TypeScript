@@ -3,7 +3,6 @@ import { authenticateJwt } from "../middleware";
 import { Todo } from "../db";
 const router = express.Router();
 
-
 router.post("/todos", authenticateJwt, (req: Request, res: Response) => {
   const { title, description } = req.body;
   const done = false;

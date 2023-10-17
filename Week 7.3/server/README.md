@@ -40,3 +40,7 @@ You WILL need mongoDB running locally, or a cloud mongoDB instance. Please repla
 # input validation using if condition
 
 # using the pm2 module to handle server disconnections
+
+# type inference
+
+- converting a given input to a type [type inputTyo = z.infer<typeof zod_object>]

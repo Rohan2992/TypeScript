@@ -2,13 +2,8 @@ import jwt from "jsonwebtoken";
 import express from "express";
 import { authenticateJwt, SECRET } from "../middleware/";
 import { User } from "../db";
-import { z } from "zod";
+import { inputValidation } from "@rohan2992/common";
 const router = express.Router();
-
-const inputValidation = z.object({
-  username: z.string().min(1).max(30).email(),
-  password: z.union([z.number().min(1).max(9999999999), z.string().min(1).max(20)])
-});
 
 router.get("/me", authenticateJwt, async (req, res) => {
   const user = await User.findOne({ _id: req.headers["userId"] });
