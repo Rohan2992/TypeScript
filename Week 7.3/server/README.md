@@ -36,3 +36,7 @@ You WILL need mongoDB running locally, or a cloud mongoDB instance. Please repla
 - Try running tsc now, you should see no errors.
 
 # No implicit any : true
+
+# input validation using if condition
+
+# using the pm2 module to handle server disconnections

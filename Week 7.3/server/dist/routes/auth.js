@@ -38,14 +38,6 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 }));
 router.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (typeof req.body.username !== "string") {
-        res.status(403).send({ message: "Username should be a string" });
-        return;
-    }
-    if (typeof req.body.password !== "string") {
-        res.status(403).send({ message: "password should be a string" });
-        return;
-    }
     const { username, password } = req.body;
     const user = yield db_1.User.findOne({ username });
     if (user) {
